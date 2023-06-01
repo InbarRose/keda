@@ -124,13 +124,13 @@ func (e *scaleExecutor) createJobs(ctx context.Context, logger logr.Logger, scal
 	for key, value := range scaledJob.ObjectMeta.Labels {
 		labels[key] = value
 	}
-
 	for i := 0; i < int(scaleTo); i++ {
 		job := &batchv1.Job{
 			ObjectMeta: metav1.ObjectMeta{
 				GenerateName: scaledJob.GetName() + "-",
 				Namespace:    scaledJob.GetNamespace(),
 				Labels:       labels,
+				Annotations:  scaledJob.ObjectMeta.Annotations,
 			},
 			Spec: *scaledJob.Spec.JobTargetRef.DeepCopy(),
 		}
